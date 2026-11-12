@@ -27,6 +27,7 @@ module XMonad.Layout (
   ) where
 
 import XMonad.Core
+import qualified XMonad.Geometry as Geometry
 
 import Graphics.X11 (Rectangle(..))
 import Graphics.X11.Xlib.Extras ( Event(DestroyWindowEvent) )
@@ -92,10 +93,9 @@ tile
     -> Int       -- ^ @nmaster@, the number of windows in the master pane
     -> Int       -- ^ @n@, the total number of windows to tile
     -> [Rectangle]
-tile f r nmaster n = if n <= nmaster || nmaster == 0
-    then splitVertically n r
-    else splitVertically nmaster r1 ++ splitVertically (n-nmaster) r2 -- two columns
-  where (r1,r2) = splitHorizontallyBy f r
+tile f (Rectangle x y w h) nmaster n = map fromGeometry $
+    Geometry.tile f (Geometry.Rect (fromIntegral x) (fromIntegral y) (fromIntegral w) (fromIntegral h)) nmaster n
+  where fromGeometry (Geometry.Rect rx ry rw rh) = Rectangle (fromIntegral rx) (fromIntegral ry) (fromIntegral rw) (fromIntegral rh)
 
 --
 -- Divide the screen vertically into n subrectangles

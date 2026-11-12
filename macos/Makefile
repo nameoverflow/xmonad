@@ -1,6 +1,6 @@
 .PHONY: all test clean
 all: build/xmonad-macos build/xmonad-layout
-build/xmonad-layout: Layout.hs ../src/XMonad/StackSet.hs
+build/xmonad-layout: Layout.hs ../src/XMonad/StackSet.hs ../src/XMonad/Geometry.hs
 	mkdir -p build
 	ghc -O -i../src -outputdir build Layout.hs -o $@
 build/xmonad-macos: main.swift
